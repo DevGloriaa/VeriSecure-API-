@@ -1,14 +1,17 @@
 package com.codewithgloria.verisecureapi.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
-public class User {
+@Entity
+@Table(name = "VeriSecure")
+@Getter
+@Setter
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
