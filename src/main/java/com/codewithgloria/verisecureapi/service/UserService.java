@@ -1,4 +1,4 @@
 package com.codewithgloria.verisecureapi.service;
 
-public class UserService {
+public interface UserService {
 }
