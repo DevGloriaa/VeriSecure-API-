@@ -1,5 +1,7 @@
 package com.codewithgloria.verisecureapi.serviceImpl;
 
+import com.codewithgloria.verisecureapi.dto.LoginDto;
+import com.codewithgloria.verisecureapi.exceptions.HandleEventDoesNotExistException;
 import com.codewithgloria.verisecureapi.model.Users;
 import com.codewithgloria.verisecureapi.repository.UserRepository;
 import com.codewithgloria.verisecureapi.service.UserService;
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
 
     @Override
@@ -25,6 +27,17 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user1);
         return user1;
+    }
+
+    @Override
+    public String login(LoginDto user) {
+        Users existing = userRepository.findByEmailIgnoreCase(String.valueOf(user.getEmail()))
+                .orElseThrow(() -> new HandleEventDoesNotExistException("User does not exist"));
+
+        if (!existing.getPassword().equals(user.getPassword())) {
+            throw new HandleEventDoesNotExistException("Wrong password");
+        }
+        return existing.getEmail();
     }
 }
 

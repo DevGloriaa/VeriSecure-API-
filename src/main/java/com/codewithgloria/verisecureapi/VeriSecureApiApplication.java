@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class VeriSecureApiApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(VeriSecureApiApplication.class, args);
+        System.out.println("VeriSecure application Started");
     }
 
 }
