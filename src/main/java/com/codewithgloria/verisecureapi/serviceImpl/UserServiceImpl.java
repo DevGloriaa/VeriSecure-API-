@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(newUser);
     }
     @Override
-    public String login(LoginDto dto) throws HandleInvalidCredentialsException {
+    public String  login(LoginDto dto) throws HandleInvalidCredentialsException {
         Users existing = userRepository.findByEmailIgnoreCase(dto.getEmail())
                 .orElseThrow(() -> new HandleEventDoesNotExistException("User does not exist"));
 
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
             throw new HandleInvalidCredentialsException("Invalid password");
         }
 
-        return existing.getEmail();
+        return "Login Successful";
     }
 }
 
