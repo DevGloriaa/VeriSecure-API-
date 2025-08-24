@@ -11,12 +11,15 @@ import com.codewithgloria.verisecureapi.service.JwtService;
 import com.codewithgloria.verisecureapi.service.OtpService;
 import com.codewithgloria.verisecureapi.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -69,7 +72,6 @@ public class UserServiceImpl implements UserService {
         return jwtService.generateToken(existing);
     }
 
-
     @Override
     public boolean verifyOtp(String email, String otp) {
         boolean isValid = otpService.validateOtp(email, otp);
@@ -82,5 +84,10 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         return false;
+    }
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.findByEmailIgnoreCase(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
     }
 }
