@@ -1,6 +1,7 @@
 package com.codewithgloria.verisecureapi.model;
 
 //import jakarta.persistence.*;
+import com.codewithgloria.verisecureapi.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -33,5 +34,6 @@ public class Users {
     private String password;
 
     private boolean verified =  false;
+    private Role role;
 
 }

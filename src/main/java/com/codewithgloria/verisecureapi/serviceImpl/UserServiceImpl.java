@@ -1,11 +1,13 @@
 package com.codewithgloria.verisecureapi.serviceImpl;
 
 import com.codewithgloria.verisecureapi.dto.LoginDto;
+import com.codewithgloria.verisecureapi.enums.Role;
 import com.codewithgloria.verisecureapi.exceptions.HandleEventDoesNotExistException;
 import com.codewithgloria.verisecureapi.exceptions.HandleInvalidCredentialsException;
 import com.codewithgloria.verisecureapi.model.Users;
 import com.codewithgloria.verisecureapi.repository.UserRepository;
 import com.codewithgloria.verisecureapi.service.EmailService;
+import com.codewithgloria.verisecureapi.service.JwtService;
 import com.codewithgloria.verisecureapi.service.OtpService;
 import com.codewithgloria.verisecureapi.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final OtpService otpService;
+    private final JwtService jwtService;
 
     @Override
     public Users registration(Users user) {
@@ -33,10 +36,18 @@ public class UserServiceImpl implements UserService {
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         newUser.setPassword(hashedPassword);
 
+        if (user.getRole() == null) {
+            newUser.setRole(Role.ROLE_USER);
+        } else {
+            if (user.getRole() == Role.ROLE_ADMIN) {
+                throw new HandleInvalidCredentialsException("Cannot self-register as admin");
+            }
+            newUser.setRole(user.getRole());
+        }
+
         Users savedUser = userRepository.save(newUser);
 
         String otp = otpService.generateOtp(savedUser.getEmail());
-
         emailService.sendOtp(savedUser.getEmail(), otp);
 
         return savedUser;
@@ -55,8 +66,9 @@ public class UserServiceImpl implements UserService {
             throw new HandleInvalidCredentialsException("Please verify your email first.");
         }
 
-        return "Login Successful";
+        return jwtService.generateToken(existing);
     }
+
 
     @Override
     public boolean verifyOtp(String email, String otp) {
