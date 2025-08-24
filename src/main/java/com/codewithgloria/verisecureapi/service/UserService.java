@@ -5,9 +5,8 @@ import com.codewithgloria.verisecureapi.exceptions.HandleInvalidCredentialsExcep
 import com.codewithgloria.verisecureapi.model.Users;
 
 public interface UserService {
-
     Users registration (Users user);
-
     String login (LoginDto user) throws HandleInvalidCredentialsException;
+    boolean verifyOtp(String email, String otp);
 
 }

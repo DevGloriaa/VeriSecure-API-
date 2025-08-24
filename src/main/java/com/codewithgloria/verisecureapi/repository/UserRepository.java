@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends MongoRepository<Users, Long> {
+public interface UserRepository extends MongoRepository<Users, String> {
     Optional<Users> findByEmailIgnoreCase(String email);
 }

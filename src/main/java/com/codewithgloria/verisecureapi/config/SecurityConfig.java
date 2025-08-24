@@ -13,9 +13,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // disable CSRF so Postman can send POST requests
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/verisecure/registration", "/verisecure/login").permitAll()
+                        .requestMatchers("/verisecure/**").permitAll()
                         .anyRequest().authenticated()
                 );
 

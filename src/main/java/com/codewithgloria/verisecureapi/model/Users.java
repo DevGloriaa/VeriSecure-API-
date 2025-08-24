@@ -32,4 +32,6 @@ public class Users {
     @Size(min = 3, max = 20)
     private String password;
 
+    private boolean verified =  false;
+
 }
